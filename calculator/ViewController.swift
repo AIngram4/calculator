@@ -16,6 +16,7 @@ class ViewController: UIViewController {
         case Multiply = "*"
         case Subtract = "-"
         case Add = "+"
+        case Sum = "="
         case Empty = "Empty"
     }
     
@@ -35,11 +36,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let path = NSBundle.mainBundle().pathForResource("btn", ofType: "wav")
-        let soundUrl = NSURL(fileURLWithPath: path!)
+        let path = Bundle.main.path(forResource: "btn", ofType: "wav")
+        let soundUrl = URL(fileURLWithPath: path!)
         
         do {
-            try buttonSound = AVAudioPlayer(contentsOfURL: soundUrl)
+            try buttonSound = AVAudioPlayer(contentsOf: soundUrl)
                 buttonSound.prepareToPlay()
             
         } catch let err as NSError {
@@ -50,35 +51,36 @@ class ViewController: UIViewController {
         
     }
     
-    @IBAction func numberPressed(button: UIButton!){
+    @IBAction func numberPressed(_ button: UIButton!){
         playSound()
         
         runningNumber += "\(button.tag)"
         outputLabel.text = runningNumber
     }
 
-    @IBAction func onDividePress(sender: AnyObject) {
+    @IBAction func onDividePress(_ sender: AnyObject) {
         processOperation(Operation.Divide)
         
     }
 
-    @IBAction func onMultiplyPress(sender: AnyObject) {
+    @IBAction func onMultiplyPress(_ sender: AnyObject) {
         processOperation(Operation.Multiply)
     }
     
-    @IBAction func onSubstractPress(sender: AnyObject) {
+    @IBAction func onSubstractPress(_ sender: AnyObject) {
         processOperation(Operation.Subtract)
     }
     
-    @IBAction func onAddPress(sender: AnyObject) {
+    @IBAction func onAddPress(_ sender: AnyObject) {
         processOperation(Operation.Add)
     }
     
-    @IBAction func onEqualPress(sender: AnyObject) {
+    @IBAction func onEqualPress(_ sender: AnyObject) {
         processOperation(currentOperation)
+        
     }
     
-    @IBAction func onClearPress(sender: AnyObject) {
+    @IBAction func onClearPress(_ sender: AnyObject) {
         playSound()
         runningNumber = ""
         leftValStr = ""
@@ -89,7 +91,7 @@ class ViewController: UIViewController {
         
     }
     
-    func processOperation(op: Operation) {
+    func processOperation(_ op: Operation) {
         playSound()
         
         if currentOperation != Operation.Empty {
@@ -114,9 +116,9 @@ class ViewController: UIViewController {
                 }
                 leftValStr = result
                 outputLabel.text = result
+                
+                
             }
-            
-                currentOperation = op
             
             }else{
             leftValStr = runningNumber
@@ -127,7 +129,7 @@ class ViewController: UIViewController {
     }
     
     func playSound() {
-        if buttonSound.playing {
+        if buttonSound.isPlaying {
             buttonSound.stop()
             
         }
